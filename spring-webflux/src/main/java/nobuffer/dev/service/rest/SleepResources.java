@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @RestController()
 @RequestMapping("/sleep")
@@ -26,12 +29,12 @@ public class SleepResources {
         sleep.setTime(sleepTime);
         sleep.setStartDate(LocalDateTime.now());
 
+
         return Mono.fromCallable(() -> {
             log.info("Move to async call");
-            Thread.sleep(sleepTime);
             log.info("Finish the sleep to async call");
             sleep.setEndDate(LocalDateTime.now());
             return sleep;
-        });
+        }).delayElement(Duration.ofMillis(sleepTime));
     }
 }
