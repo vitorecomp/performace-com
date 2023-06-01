@@ -1,0 +1,35 @@
+# Cargo generated files
+Cargo.lock
+target/
+
+# Generated documentation
+doc/
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Build artifacts
+*.rs.bk
+
+# Compiled files
+*.rmeta
+*.rlib
+*.rmeta.orig
+
+# Test artifacts
+*.rs.gcov
+*.rs.gcda
+*.rs.gcno
+
+# Cargo workspace files
+.workspace/
+.workspace.bk
+
+# Editor backup files
+*~
+*.swp
+
+# OS-specific files
+.DS_Store
+Thumbs.db

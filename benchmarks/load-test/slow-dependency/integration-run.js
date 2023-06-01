@@ -2,7 +2,7 @@ import faker from 'https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.min.
 
 
 import {post, getPosts, like, comment} from './post-service-run.js';
-import {getConfig, shouldPost, shouldLike, shouldComment, shouldFollow} from './config-factory.js';
+import {getConfig, shouldPost, shouldLike, shouldComment, shouldFollow} from '../kakfa-http-burst/config-factory.js';
 import {getUser, follow} from './user-service-run.js';
 
 
