@@ -1,0 +1,13 @@
+# operator.yaml
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: monitoring-prometheus
+  namespace: monitoring
+spec:
+  channel: $channel
+  startingCSV: $currentCSV
+  name: $name
+  source: $catalog_source
+  sourceNamespace: $catalog_source_namespace
+  installPlanApproval: Automatic

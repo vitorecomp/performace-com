@@ -22,16 +22,10 @@ deploy_k6_operator() {
   #get the current directory
   dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-  # moving to the deploy directory
-  cd $dir/../deploy_files
-
   # clone the https://github.com/grafana/k6-operator repo if it doesn't exist
   if [ ! -d k6-operator ]; then
     git clone https://github.com/grafana/k6-operator
   fi
-
-  # moving to the k6-operator directory
-  cd k6-operator
 
   # install the k6-operator
   make deploy
@@ -47,14 +41,8 @@ deploy_k6() {
 
     deploy_dir=$1
     test_dir=$2
-
-    #get the current dir
-    dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
-    source $dir/../common/deploy-k6.sh
     
     deploy_k6_operator
-    generate_k6_crd
 
     oc project k6-load
 
