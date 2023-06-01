@@ -1,7 +1,10 @@
 package nobuffer.dev.service.rest;
 
-import io.swagger.v3.oas.annotations.Parameter;
-import nobuffer.dev.service.domain.Sleep;
+import java.time.LocalDateTime;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -10,11 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import io.swagger.v3.oas.annotations.Parameter;
+import nobuffer.dev.service.domain.Sleep;
 
 @RestController()
 @RequestMapping("/sleep")
