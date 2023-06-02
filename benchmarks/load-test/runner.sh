@@ -6,7 +6,6 @@ export FEED_SERVICE_URL=http://feed-service-social-application.apps.cluster-lwrg
 
 k6 run integration-run.js
 
-
 generate_k6_crd() {
   dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
   cp $dir/template-deploy/k6-crd-template.yaml $dir/../deploy_files/k6-crd.yaml
