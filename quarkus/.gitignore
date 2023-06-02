@@ -40,4 +40,6 @@ nb-configuration.xml
 .env
 
 # prod application properties
-**/application-prod.proprieties
+**/application-prod.properties
+truststore.jks
+*.crt
