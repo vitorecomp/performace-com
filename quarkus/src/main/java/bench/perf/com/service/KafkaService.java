@@ -1,5 +1,8 @@
 package bench.perf.com.service;
 
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletionStage;
 
 import org.eclipse.microprofile.reactive.messaging.Channel;
@@ -11,39 +14,52 @@ import bench.perf.com.domain.KafkaMessage;
 import bench.perf.com.domain.KafkaRequest;
 import bench.perf.com.domain.RequestStatistics;
 import bench.perf.com.utility.MessageUtils;
-import io.quarkus.arc.properties.IfBuildProperty;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
+import org.jboss.logging.Logger;
+
+@ApplicationScoped
 public class KafkaService {
 
+    private static final Logger LOG = Logger.getLogger(KafkaService.class);
+
     @Inject
-    @Channel("kakfa-prog-send")
-    @IfBuildProperty(name = "kafka-producer-enabled", stringValue = "true")
+    @Channel("kafka-prog-send")
     Emitter<KafkaMessage> benchEmitter;
     
-    @IfBuildProperty(name = "kafka-producer-enabled", stringValue = "true")
     public RequestStatistics run(KafkaRequest request) {
+        RequestStatistics stats = new RequestStatistics();
+        stats.setNumMessages(request.getNumMessages());
+        stats.setMessageSize(request.getMessageSize());
+        LocalTime startTime = LocalTime.now();
         
         String message = request.getMessage();
         if(message == null){
             message = MessageUtils.generateMessage(request.getMessageSize());
         }
-
+        
         Integer messages = request.getNumMessages() != null ? request.getNumMessages() : 1;
-
+        
         KafkaMessage kafkaMessage = new KafkaMessage(message);
-
+        
         for (int i = 0; i < messages; i++) {
+            LOG.info("Seding message");  
+
             benchEmitter.send(kafkaMessage);
             //TODO add here with ack or not
         }
+        
+        LocalTime endTime = LocalTime.now();
 
-
-        return new RequestStatistics();
+        Duration duration = Duration.between(startTime, endTime);
+        stats.setDuration(duration.toMillis());
+        return stats;
     }
 
-    @Incoming("kakfa-prog-receive")
+    @Incoming("kafka-prog-recv")
     public CompletionStage<Void> consume(Message<KafkaMessage> record) {
+        LOG.info("Message Received");  
         //todo get the time
         return record.ack();
     }
