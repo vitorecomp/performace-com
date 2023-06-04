@@ -1,6 +1,5 @@
 package bench.perf.com.domain;
 
-import java.time.Duration;
 
 public class RequestStatistics {
     Integer numMessages;

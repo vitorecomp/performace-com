@@ -2,13 +2,13 @@ package bench.perf.com.service;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletionStage;
 
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
+import org.jboss.logging.Logger;
 
 import bench.perf.com.domain.KafkaMessage;
 import bench.perf.com.domain.KafkaRequest;
@@ -16,8 +16,6 @@ import bench.perf.com.domain.RequestStatistics;
 import bench.perf.com.utility.MessageUtils;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-
-import org.jboss.logging.Logger;
 
 @ApplicationScoped
 public class KafkaService {

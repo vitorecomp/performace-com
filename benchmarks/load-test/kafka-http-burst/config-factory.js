@@ -13,8 +13,16 @@ export const getConfig = () => {
     numMessages: 20,
     numberOfRequests: 10,
 
-    appUrl: fromEnv('SERVICE_URL', 'http://app.bench-application.svc.cluster.local'),
+    appUrl: fromEnv('SERVICE_URL', 'http://localhost:8080'),
   };
   return config;
+}
+
+export const getRequestBody = () => {
+  const config = getConfig();
+  return {
+    messageSize: config.messageSize,
+    numMessages: config.numMessages
+  }
 }
 
