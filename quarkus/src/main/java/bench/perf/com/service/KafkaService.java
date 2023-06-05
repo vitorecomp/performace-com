@@ -2,10 +2,7 @@ package bench.perf.com.service;
 
 import java.util.concurrent.CompletionStage;
 
-import org.eclipse.microprofile.reactive.messaging.Channel;
-import org.eclipse.microprofile.reactive.messaging.Emitter;
-import org.eclipse.microprofile.reactive.messaging.Incoming;
-import org.eclipse.microprofile.reactive.messaging.Message;
+import org.eclipse.microprofile.reactive.messaging.*;
 
 import bench.perf.com.domain.KafkaMessage;
 import bench.perf.com.domain.KafkaRequest;
@@ -19,10 +16,11 @@ public class KafkaService {
     @Inject
     @Channel("kakfa-prog-send")
     @IfBuildProperty(name = "kafka-producer-enabled", stringValue = "true")
+    @OnOverflow(value = OnOverflow.Strategy.BUFFER, bufferSize = 50000)
     Emitter<KafkaMessage> benchEmitter;
-    
+
     @IfBuildProperty(name = "kafka-producer-enabled", stringValue = "true")
-    public RequestStatistics run(KafkaRequest request) {
+    public RequestStatistics run(KafkaRequest request) throws InterruptedException {
         
         String message = request.getMessage();
         if(message == null){
@@ -33,10 +31,22 @@ public class KafkaService {
 
         KafkaMessage kafkaMessage = new KafkaMessage(message);
 
-        for (int i = 0; i < messages; i++) {
-            benchEmitter.send(kafkaMessage);
-            //TODO add here with ack or not
+        Integer timesToExecute = request.getTimesToExecute() != null ? request.getTimesToExecute() : 1;
+
+        Integer interval = request.getInterval() != null ? request.getInterval() : 1000;
+
+        for (int n = 0; n < timesToExecute; n++) {
+            for (int i = 0; i < messages; i++) {
+                benchEmitter.send(kafkaMessage);
+                //TODO add here with ack or not
+            }
+            if(timesToExecute.intValue() > 1){
+                Thread.sleep(interval.longValue());
+            }
+
         }
+
+
 
 
         return new RequestStatistics();

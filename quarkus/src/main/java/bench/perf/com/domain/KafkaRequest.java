@@ -6,15 +6,19 @@ public class KafkaRequest {
 
     private Integer numMessages;
     private Integer messageSize;
+    private Integer timesToExecute;
+    private Integer interval;
 
     public KafkaRequest() {
     }
 
-    public KafkaRequest(String topic, String message, Integer numMessages, Integer messageSize) {
+    public KafkaRequest(String topic, String message, Integer numMessages, Integer messageSize, Integer timesToExecute, Integer interval) {
         this.topic = topic;
         this.message = message;
         this.numMessages = numMessages;
         this.messageSize = messageSize;
+        this.timesToExecute = timesToExecute;
+        this.interval = interval;
     }
 
     public String getTopic() {
@@ -45,7 +49,17 @@ public class KafkaRequest {
         this.numMessages = numMessages;
     }
 
-    public void setMessageSize(Integer messageSize) {
-        this.messageSize = messageSize;
+    public void setMessageSize(Integer messageSize) { this.messageSize = messageSize; }
+
+    public Integer getTimesToExecute() { return timesToExecute; }
+
+    public void setTimesToExecute(Integer timesToExecute) {   this.timesToExecute = timesToExecute; }
+
+    public Integer getInterval() {
+        return interval;
+    }
+
+    public void setInterval(Integer interval) {
+        this.interval = interval;
     }
 }
