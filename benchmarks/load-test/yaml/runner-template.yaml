@@ -1,12 +1,12 @@
 apiVersion: k6.io/v1alpha1
 kind: K6
 metadata:
-  name: integration-run
+  name: $test_name
 spec:
   parallelism: 4
   script:
     configMap:
-      name: "social-test"
+      name: $application
       file: "integration-run.js" # <-- change here
   arguments: -o experimental-prometheus-rw --tag testid=integration-test
   runner:

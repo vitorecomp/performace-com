@@ -1,9 +1,4 @@
 #!/bin/bash
-
-dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
-
-
 ###################################### main ######################################
 
 #getting the script dir
