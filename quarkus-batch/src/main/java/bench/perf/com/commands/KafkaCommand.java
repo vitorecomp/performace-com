@@ -13,9 +13,9 @@ public class KafkaCommand implements Runnable {
     private Integer numMessages;
     @Parameters(paramLabel = "<messageSize>", defaultValue = "2000", description = "The size of each message.")
     private Integer messageSize;
-    @Parameters(paramLabel = "<timesToExecute>", defaultValue = "20", description = "The number of executions.")
+    @Parameters(paramLabel = "<timesToExecute>", defaultValue = "200", description = "The number of executions.")
     private Integer timesToExecute;
-    @Parameters(paramLabel = "<interval>", defaultValue = "10", description = "The interval between the executions.")
+    @Parameters(paramLabel = "<interval>", defaultValue = "10000", description = "The interval between the executions.")
     private Integer interval;
 
     KafkaService kafkaService;
