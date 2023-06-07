@@ -6,8 +6,8 @@ metadata:
   namespace: kafka
 spec:
   channel: $channel
-  startingCSV: $currentCSV
-  name: $name
-  source: $catalog_source
+  startingCSV: "$currentCSV"
+  name: "$name"
+  source: "$catalog_source"
   sourceNamespace: $catalog_source_namespace
   installPlanApproval: Automatic

@@ -91,12 +91,23 @@ generate_grafana_datasource_yaml() {
     output_dir=$2
 
     cat $input_dir/crd-grafana-datasource-template.yaml >|$output_dir/crd-grafana-datasource.yaml
+    cat $input_dir/crd-grafana-datasource-openshift-prometheus-template.yaml >|$output_dir/crd-grafana-datasource-openshift-prometheus.yaml
 }
 
 apply_grafana_datasource() {
     deploy_dir=$1
 
+
+    oc project openshift-monitoring
+    oc get secret prometheus-k8s-htpasswd -o jsonpath='{.data.auth}' | base64 -d > /tmp/htpasswd-tmp
+    echo >> /tmp/htpasswd-tmp #<-- MUST HAVE NEWLINE ADDED
+    htpasswd -s -b  /tmp/htpasswd-tmp grafana-test topsecret
+    oc patch secret prometheus-k8s-htpasswd -p "{\"data\":{\"auth\":\"$(base64 -w0 /tmp/htpasswd-tmp)\"}}"
+    oc delete pod -l app=prometheus
+    oc project monitoring
+
     oc apply -f $deploy_dir/crd-grafana-datasource.yaml
+    oc apply -f $deploy_dir/crd-grafana-datasource-openshift-prometheus.yaml
 }
 
 generate_grafana_dashboard_yaml() {

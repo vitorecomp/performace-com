@@ -1,18 +1,18 @@
 apiVersion: k6.io/v1alpha1
 kind: K6
 metadata:
-  name: $test_name
+  name: $application-$test_name
 spec:
   parallelism: 4
   script:
     configMap:
-      name: $application
+      name: $application-$test_name
       file: "integration-run.js" # <-- change here
-  arguments: -o experimental-prometheus-rw --tag testid=integration-test
+  arguments: -o experimental-prometheus-rw --tag testid=$application-$test_name
   runner:
     metadata:
       labels:
-        test-name: integration-test
+        test-name: $application-$test_name
     env:
       - name: K6_PROMETHEUS_RW_SERVER_URL
         value: http://prometheus-operated.monitoring.svc.cluster.local:9090/api/v1/write
@@ -26,7 +26,7 @@ spec:
   starter:
     metadata:
       labels:
-        test-name: integration-test
+        test-name: $application-$test_name
     serviceAccountName: k6-runner
     securityContext:
       runAsUser: 1000

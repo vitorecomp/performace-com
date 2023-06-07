@@ -43,3 +43,4 @@ nb-configuration.xml
 **/application-prod.properties
 truststore.jks
 *.crt
+scripts/tmp

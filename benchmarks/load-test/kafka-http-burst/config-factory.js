@@ -13,7 +13,7 @@ export const getConfig = () => {
     numMessages: 20,
     numberOfRequests: 10,
 
-    appUrl: fromEnv('SERVICE_URL', 'http://localhost:8080'),
+    appUrl: fromEnv('APP_URL', 'http://localhost:8080'),
   };
   return config;
 }

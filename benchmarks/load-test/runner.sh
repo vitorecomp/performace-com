@@ -1,4 +1,12 @@
 #!/bin/bash
+###################################### README ######################################
+
+#run example
+# -  sh runner.sh openshift kafka-http-burst simple performance-bencher-quarkus-performance-bencher.apps.cluster-tddng.tddng.sandbox999.opentlc.com
+
+###################################### functions ######################################
+
+
 run_openshift(){
     gum format --theme=light "# Deploy test $test_name of $application on Openshit"
 
@@ -20,8 +28,7 @@ run_openshift(){
     app_dir=$base_dir/$application
 
     if [ "$application" == "kafka-http-burst" ]; then
-        cd $dir/kafka-http-burst
-        k6 run integration-run.js
+        cd $dir/$application
     elif [ "$application" == "slow-dependecy" ]; then
         echo "slow-dependecy was no implemented it."
         echo "fell free to contribute, any help is welcome."
@@ -39,14 +46,36 @@ run_openshift(){
     envsubst < $yml_dir/runner-template.yaml >| $tmp_dir/runner.yaml
 
     gum format --theme=light "## creating the config maps"
+
+    #delete config map if exist
+    if oc get configmap $application-$test_name &> /dev/null;
+    then
+        oc delete configmap $application-$test_name
+    fi
     
     oc create configmap $application-$test_name --from-file $app_dir/integration-run.js --from-file $app_dir/config-factory.js 
 
     gum format --theme=light "## creating the sa"
-    oc create sa k6-runner
-    oc adm policy add-scc-to-user anyuid -z k6-runner
+
+    #look if the sa not exist
+    if ! oc get sa k6-runner &> /dev/null;
+    then
+        oc create sa k6-runner
+        oc adm policy add-scc-to-user anyuid -z k6-runner
+    else
+        gum format --theme=light "### sa already exists."
+    fi
+    
 
     gum format --theme=light "## deploying the k6 crds"
+
+    #if the crd already exist, delete it
+    if oc get k6 $application-$test_name &> /dev/null;
+    then
+        gum format --theme=light "### k6 crd already exists. Deleting it."
+        oc delete k6 $application-$test_name
+    fi
+
     oc apply -f $tmp_dir/runner.yaml
 
 }

@@ -1,0 +1,14 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: performance-topic-test
+  labels:
+    strimzi.io/cluster: my-cluster
+  namespace: kafka
+spec:
+  config:
+    retention.ms: 3600000
+    segment.bytes: 8589934592
+  partitions: 10
+  replicas: 3
+  topicName: performanceTopicTest

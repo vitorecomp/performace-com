@@ -8,6 +8,7 @@ import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
+import org.eclipse.microprofile.reactive.messaging.OnOverflow;
 import org.jboss.logging.Logger;
 
 import bench.perf.com.domain.KafkaMessage;
@@ -24,6 +25,7 @@ public class KafkaService {
 
     @Inject
     @Channel("kafka-prog-send")
+    @OnOverflow(value = OnOverflow.Strategy.BUFFER, bufferSize = 50000)
     Emitter<KafkaMessage> benchEmitter;
     
     public RequestStatistics run(KafkaRequest request) {
