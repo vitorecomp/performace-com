@@ -12,5 +12,5 @@ spec:
   config: {}
   dashboardLabelSelector:
     - matchExpressions:
-        - key: k6-dash
+        - key: mon-dash
           operator: Exists

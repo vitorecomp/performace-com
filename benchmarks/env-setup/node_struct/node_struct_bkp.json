@@ -1,0 +1,16 @@
+{
+    "kafka":[
+        "ip-10-0-131-155.us-east-2.compute.internal",
+        "ip-10-0-135-206.us-east-2.compute.internal",
+        "ip-10-0-161-220.us-east-2.compute.internal"
+    ],
+    "kafka_utils":[
+        "ip-10-0-209-123.us-east-2.compute.internal"
+    ],
+    "postgres":[
+
+    ],
+    "application":[
+        "ip-10-0-219-39.us-east-2.compute.internal"
+    ]
+}

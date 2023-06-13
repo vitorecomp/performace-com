@@ -2,7 +2,7 @@ apiVersion: integreatly.org/v1alpha1
 kind: GrafanaDashboard
 metadata:
   labels:
-    k6-dash: imported
+    mon-dash: imported
   name: k6-dash
   namespace: monitoring
 spec:

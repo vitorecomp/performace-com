@@ -25,7 +25,7 @@ public class KafkaService {
 
     @Inject
     @Channel("kafka-prog-send")
-    @OnOverflow(value = OnOverflow.Strategy.BUFFER, bufferSize = 50000)
+    @OnOverflow(value = OnOverflow.Strategy.BUFFER, bufferSize = 500000)
     Emitter<KafkaMessage> benchEmitter;
     
     public RequestStatistics run(KafkaRequest request) {
@@ -44,7 +44,7 @@ public class KafkaService {
         KafkaMessage kafkaMessage = new KafkaMessage(message);
         
         for (int i = 0; i < messages; i++) {
-            LOG.info("Seding message");  
+            LOG.debug("Seding message");  
 
             benchEmitter.send(kafkaMessage);
             //TODO add here with ack or not
@@ -59,7 +59,7 @@ public class KafkaService {
 
     @Incoming("kafka-prog-recv")
     public CompletionStage<Void> consume(Message<KafkaMessage> record) {
-        LOG.info("Message Received");  
+        LOG.debug("Message Received");  
         //todo get the time
         return record.ack();
     }

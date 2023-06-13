@@ -2,7 +2,7 @@
 ###################################### README ######################################
 
 #run example
-# -  sh runner.sh openshift kafka-http-burst simple performance-bencher-quarkus-performance-bencher.apps.cluster-tddng.tddng.sandbox999.opentlc.com
+# -  openshift kafka-http-burst simplebufferedwiththreds http://performance-bencher-quarkus.performance-bencher.svc.cluster.local
 
 ###################################### functions ######################################
 

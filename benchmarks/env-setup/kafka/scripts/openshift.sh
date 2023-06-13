@@ -60,13 +60,29 @@ deploy_operator() {
 
     generate_operator_yaml $template_dir $output_dir
     apply_operator $output_dir
+
+    #wait the operator to be ready
+    gum spin --title "wait kafka subscription" -- oc wait --for=condition=AtLatestKnown --timeout=600s subscription/amq-streams -n monitoring
+    gum spin --title "wait kafka operator" -- oc wait --for=condition=available --timeout=600s  --selector=name=amq-streams-cluster-operator
 }
 
 generate_kafka_yaml() {
     template_dir=$1
     output_dir=$2
+    dedicated=$3
 
-    envsubst <$template_dir/kafka-crd-template.yaml >|$output_dir/kafka-crd.yaml
+    envsubst <$template_dir/kafka-crd-template.yaml >| $output_dir/kafka-crd.yaml
+
+    if [ $dedicated == false ]; then
+        echo "teste"
+        cat $output_dir/kafka-crd.yaml | yq 'del(.spec.cruiseControl.template)' \
+            | yq 'del(.spec.entityOperator.template)' \
+            | yq 'del(.spec.kafka.template)' \
+            | yq 'del(.spec.zookeeper.template)' >| $output_dir/kafka-crd-tmp.yaml
+        cat $output_dir/kafka-crd-tmp.yaml >| $output_dir/kafka-crd.yaml
+        rm $output_dir/kafka-crd-tmp.yaml
+    fi
+
 }
 
 apply_kafka() {
@@ -75,11 +91,14 @@ apply_kafka() {
     oc apply -f $deploy_dir/kafka-crd.yaml
 }
 
+#TODO add the dedicated logic
 deploy_kafka() {
     template_dir=$1
     output_dir=$2
+    dedicated=$3
 
-    generate_kafka_yaml $template_dir $output_dir
+    generate_kafka_yaml $template_dir $output_dir $dedicated
+        #TODO remove the dedicated logic
     apply_kafka $output_dir
 }
 
@@ -129,6 +148,7 @@ run_openshift() {
     template_dir=$1
     output_dir=$2
     clean=$3
+    dedicated=$4
 
     dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
     source $dir/../../utils/openshift-utils.sh
@@ -148,10 +168,8 @@ run_openshift() {
     deploy_monitoring $template_dir $output_dir
 
     gum format --theme=light "## Deploying the kafka crd"
-    deploy_kafka $template_dir $output_dir
+    deploy_kafka $template_dir $output_dir $dedicated
 
     gum format --theme=light "## Deploying kafka topic"
     deploy_topic $template_dir $output_dir
-
-    
 }

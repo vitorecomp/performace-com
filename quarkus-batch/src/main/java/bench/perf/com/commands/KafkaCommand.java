@@ -9,11 +9,11 @@ import picocli.CommandLine.Parameters;
 @Command(name = "greeting", mixinStandardHelpOptions = true)
 public class KafkaCommand implements Runnable {
 
-    @Parameters(paramLabel = "<numMessages>", defaultValue = "10", description = "The number of messages to send by run.")
+    @Parameters(paramLabel = "<numMessages>", defaultValue = "25000", description = "The number of messages to send by run.")
     private Integer numMessages;
-    @Parameters(paramLabel = "<messageSize>", defaultValue = "2000", description = "The size of each message.")
+    @Parameters(paramLabel = "<messageSize>", defaultValue = "2048", description = "The size of each message.")
     private Integer messageSize;
-    @Parameters(paramLabel = "<timesToExecute>", defaultValue = "200", description = "The number of executions.")
+    @Parameters(paramLabel = "<timesToExecute>", defaultValue = "50", description = "The number of executions.")
     private Integer timesToExecute;
     @Parameters(paramLabel = "<interval>", defaultValue = "10000", description = "The interval between the executions.")
     private Integer interval;

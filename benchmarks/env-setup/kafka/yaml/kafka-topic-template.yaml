@@ -9,6 +9,6 @@ spec:
   config:
     retention.ms: 3600000
     segment.bytes: 8589934592
-  partitions: 10
+  partitions: 3
   replicas: 3
   topicName: performanceTopicTest

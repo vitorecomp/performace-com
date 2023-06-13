@@ -14,8 +14,13 @@ spec:
         name: alertmanager-main
         port: web
   probeSelector: {}
-  podMonitorSelector: {}
+  podMonitorSelector:
+    matchLabels:
+      app: strimzi
   scrapeInterval: 30s
   ruleSelector: {}
   replicas: 2
-  serviceAccountName: prometheus-k8s
+  serviceAccountName: prometheus-server
+  additionalScrapeConfigs:
+    name: additional-scrape-configs
+    key: prometheus-additional.yaml

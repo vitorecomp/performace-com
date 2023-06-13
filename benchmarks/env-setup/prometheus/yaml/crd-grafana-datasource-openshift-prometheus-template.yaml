@@ -2,6 +2,7 @@ apiVersion: integreatly.org/v1alpha1
 kind: GrafanaDataSource
 metadata:
   name: prometheus-openshift
+  namespace: monitoring
 spec:
   datasources:
     - basicAuthUser: grafana-test
@@ -10,7 +11,8 @@ spec:
       isDefault: false
       secureJsonData:
         basicAuthPassword: topsecret
-      name: Prometheus
+      name: prometheus-openshift
+      uid: prometheus-openshift
       url: 'https://prometheus-k8s.openshift-monitoring.svc.cluster.local:9091'
       jsonData:
         timeInterval: 5s

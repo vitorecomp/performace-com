@@ -39,6 +39,18 @@ generate_prometheus_crd_yaml() {
     output_dir=$2
 
     envsubst <$template_dir/crd-prometheus-template.yaml >|$output_dir/crd-prometheus.yaml
+
+    cp $template_dir/crd-pod-monitor-prometheus-kafka-one-template.yaml $output_dir/crd-pod-monitor-prometheus-kafka-one.yaml
+    cp $template_dir/crd-pod-monitor-prometheus-kafka-two-template.yaml $output_dir/crd-pod-monitor-prometheus-kafka-two.yaml
+    cp $template_dir/crd-pod-monitor-prometheus-kafka-three-template.yaml $output_dir/crd-pod-monitor-prometheus-kafka-three.yaml
+    cp $template_dir/crd-pod-monitor-prometheus-kafka-four-template.yaml $output_dir/crd-pod-monitor-prometheus-kafka-four.yaml
+
+    cp $template_dir/crd-prometheus-service-account-template.yaml $output_dir/crd-prometheus-service-account.yaml
+    cp $template_dir/crd-prometheus-service-account-rbac-kafka-template.yaml $output_dir/crd-prometheus-service-account-rbac-kafka.yaml
+    cp $template_dir/crd-prometheus-service-account-rbac-monitoring-template.yaml $output_dir/crd-prometheus-service-account-rbac-monitoring.yaml
+    cp $template_dir/crd-prometheus-service-account-cluster-rules-template.yaml $output_dir/crd-prometheus-service-account-cluster-rules.yaml
+
+    cp $template_dir/crd-prometheus-secret-config-template.yaml $output_dir/crd-prometheus-secret-config.yaml
 }
 
 apply_prometheus() {
@@ -48,6 +60,18 @@ apply_prometheus() {
 
     gum spin --title "wait prometheus subscription" -- oc wait --for=condition=AtLatestKnown --timeout=600s subscription/prometheus -n monitoring
     gum spin --title "wait prometheus operator" -- oc wait --for=condition=available --timeout=600s deployment/prometheus-operator -n monitoring
+
+    oc apply -f $deploy_dir/crd-pod-monitor-prometheus-kafka-one.yaml
+    oc apply -f $deploy_dir/crd-pod-monitor-prometheus-kafka-two.yaml
+    oc apply -f $deploy_dir/crd-pod-monitor-prometheus-kafka-three.yaml
+    oc apply -f $deploy_dir/crd-pod-monitor-prometheus-kafka-four.yaml
+
+    oc apply -f $deploy_dir/crd-prometheus-service-account.yaml
+    oc apply -f $deploy_dir/crd-prometheus-service-account-rbac-kafka.yaml
+    oc apply -f $deploy_dir/crd-prometheus-service-account-rbac-monitoring.yaml
+    oc apply -f $deploy_dir/crd-prometheus-service-account-cluster-rules.yaml
+
+    oc apply -f $deploy_dir/crd-prometheus-secret-config.yaml
 
     oc apply -f $deploy_dir/crd-prometheus.yaml
 }
@@ -82,6 +106,7 @@ apply_grafana_operator() {
     oc apply -f $deploy_dir/operator-grafana.yaml
 
     gum spin --title "wait grafana subscription" -- oc wait --for=condition=AtLatestKnown --timeout=600s subscription/grafana -n monitoring
+    gum spin --title "wait grafana subscription" -- oc wait --for=condition=available --timeout=600s subscription/grafana -n monitoring
     gum spin --title "wait grafana operator" -- oc wait --for=condition=available --timeout=600s deployment/grafana-operator-controller-manager -n monitoring
 
 }
@@ -103,7 +128,8 @@ apply_grafana_datasource() {
     echo >> /tmp/htpasswd-tmp #<-- MUST HAVE NEWLINE ADDED
     htpasswd -s -b  /tmp/htpasswd-tmp grafana-test topsecret
     oc patch secret prometheus-k8s-htpasswd -p "{\"data\":{\"auth\":\"$(base64 -w0 /tmp/htpasswd-tmp)\"}}"
-    oc delete pod -l app=prometheus
+    oc delete pod -l app=prometheus -n openshift-monitoring
+    oc delete pod -l app.kubernetes.io/name=prometheus -n openshift-monitoring
     oc project monitoring
 
     oc apply -f $deploy_dir/crd-grafana-datasource.yaml
@@ -115,12 +141,16 @@ generate_grafana_dashboard_yaml() {
     output_dir=$2
 
     cat $input_dir/crd-grafana-dashboard-template.yaml >|$output_dir/crd-grafana-dashboard.yaml
+    cat $input_dir/crd-grafana-dashboard-kafka-template.yaml >|$output_dir/crd-grafana-dashboard-kafka.yaml
+    cat $input_dir/crd-grafana-dashboard-kafka-inbound-template.yaml >|$output_dir/crd-grafana-dashboard-kafka-inbound.yaml
 }
 
 apply_grafana_dashboard() {
     deploy_dir=$1
 
     oc apply -f $deploy_dir/crd-grafana-dashboard.yaml
+    oc apply -f $deploy_dir/crd-grafana-dashboard-kafka.yaml
+    oc apply -f $deploy_dir/crd-grafana-dashboard-kafka-inbound.yaml
 
 }
 
@@ -165,7 +195,6 @@ deploy_grafana_operator() {
     output_dir=$2
 
     generate_grafana_operator_yaml $template_dir $output_dir
-    generate_grafana_crd_yaml $template_dir $output_dir
     apply_grafana_operator $output_dir
 }
 

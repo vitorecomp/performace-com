@@ -4,20 +4,6 @@
 #getting the script dir
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-#look if is necessary to clean the project
-if [ "$2" == "clean" ]; then
-    clean=true
-else
-    clean=false
-fi
-
-#look if is necessary to clean the project
-if [ "$3" == "dedicated" ]; then
-    dedicated=true
-else
-    dedicated=false
-fi
-
 # test if gum is installed
 if ! command -v gum &> /dev/null
 then
@@ -46,5 +32,5 @@ if [ "$name" == "kubernetes" ]; then
     exit
 else
     source $dir/scripts/openshift.sh
-    run_openshift $dir/yaml $dir/tmp $clean $dedicated
+    run_openshift 
 fi

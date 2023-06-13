@@ -18,3 +18,23 @@ create_project() {
     #create the project
     oc new-project $project_name
 }
+set_node_taint() {
+    node=$1
+    taints=$2
+
+    oc adm taint nodes $node app=$taints:NoSchedule --overwrite
+}
+
+set_node_selector() {
+    node=$1
+    selector=$2
+
+    oc label node $node node/type=$selector --overwrite
+}
+
+set_project_selector(){
+    project_name=$1
+    selector=$2
+
+    oc label namespace $project_name $selector
+}
