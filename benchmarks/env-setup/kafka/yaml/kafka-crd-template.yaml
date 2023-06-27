@@ -49,11 +49,15 @@ spec:
   kafka:
     config:
       default.replication.factor: 3
-      inter.broker.protocol.version: '3.3'
+      inter.broker.protocol.version: '3.4'
       min.insync.replicas: 2
       offsets.topic.replication.factor: 3
+      topic.creation.enable: false
       transaction.state.log.min.isr: 2
       transaction.state.log.replication.factor: 3
+      log.retention.hours: 168
+      log.segment.bytes: 1073741824
+      log.retention.check.interval.ms: 300000
     jvmOptions:
       '-Xms': 6g
       '-Xmx': 10g
@@ -66,10 +70,11 @@ spec:
         port: 9093
         tls: true
         type: internal
-    replicas: 3
+    replicas: 7
     storage:
+      class: gp3-csi
       deleteClaim: true
-      size: 30Gi
+      size: 100Gi
       type: persistent-claim
     version: 3.4.0
     metricsConfig:
@@ -135,7 +140,7 @@ spec:
               key: app
               operator: Equal
               value: kafka
-    replicas: 3
+    replicas: 7
     storage:
       type: ephemeral
     metricsConfig:

@@ -8,19 +8,36 @@ There are various approaches to conducting load tests. One of them is to use spe
 
 Furthermore, load tests can be complemented by techniques such as horizontal scaling, where the system is distributed across multiple servers to increase its processing capacity. This allows evaluating how the system behaves when horizontally scaled, handling higher loads and distributing the processing among different nodes.
 
-If you're looking for a simple and quick solution to test Kafka performance, Kafka Perf Test with the CLI can be a viable option. This tool allows simulating production-level production and consumption loads on a Kafka cluster, with customized configurations to adjust message volume, production rate, message size, among other parameters. It is suitable if you need to perform quick tests and do not require complex integration with other tools or APIs.
+In this repository, you will find the essential resources to test multiple languages on some of the most common tasks in modern development processes. These tasks include responding to HTTP servers, making HTTP requests, communicating over REST APIs or gRPC calls, producing and consuming Kafka messages, and saving and retrieving data from PostgreSQL, among other common tasks.
 
-On the other hand, if you're seeking a more comprehensive and flexible approach, developing an API for production and an application for consumption, combined with the use of a load testing tool like K6 or JMeter, can offer more possibilities. This approach allows creating more realistic test scenarios involving interactions with other parts of the system, data manipulation, specific validations, among other aspects. K6 is a popular tool for load testing and can be easily integrated into your development and CI/CD workflow.
+The purpose of this repository is to provide developers with a practical and hands-on approach to testing various programming languages in different scenarios. By exploring the code and examples provided, you can gain a better understanding of how different languages handle these tasks and make informed decisions when selecting the most suitable language for your specific project requirements.
 
-This approach allows simulating the production and consumption behavior of data in an environment closer to the real-world usage scenario. You can create custom test cases, including specific interactions with other parts of the system, data manipulation, integrity validations, and other relevant aspects for your use case. That's why I chose this approach to demonstrate in this repository. The topics below will show how to deploy each tool so that we can eventually run the tests. To get started, you'll need a Red Hat OpenShift cluster and the following three namespaces:
+Feel free to explore the repository and leverage the resources available to enhance your knowledge and skills in multi-language development. The goal is to empower developers to choose the right language for the job and build robust and efficient applications in diverse environments.
 
-* kafka: for deploying Kafka and Kafka Exporter
-* tracing-plataform: for deploying Elasticsearch and Jaeger
-* camel-quarkus-apps: for deploying the producer and consumer applications
-  
-Let's Enjoy!
+## Complete List of Respo capabilities
 
-## Deploy the Open Telemetry
+Bellow, you will find a comprehensive list of the capabilities provided by this repository:
+
+### To environment setup
+
+|                       | Openshift | Kubernetes  |  Monitoring |
+|-----------------------|-----------|-------------|-------------|
+|Kafka                  |     X     |      -      |      X      |
+|Postgres               |     X     |      -      |      -      |
+|Monitoring Tool        |     X     |      -      |      X      |
+|DataScience Analysis   |     X     |      -      |      -      |
+|K6 load test           |     X     |      -      |      X      |
+
+### Language capabilities
+
+|           | HTTP | GRPC | COMPLEX HTTP | KAFKA | DATABASE|
+|-----------|------|------|--------------|-------|---------|
+|   Quarkus |X     |-     |-             |X      |-        |
+|   Golang  |-     |-     |-             |-      |-        |
+|   Rust    |-     |-     |-             |-      |-        |
+|   NodeJS  |-     |-     |-             |-      |-        |
+
+## Make the environment setup
 
 Log on Openshift, select tracing-plataform project and from Operator Hub, install Elastisearch Operator:
 
@@ -40,7 +57,7 @@ Create a Jaeger Custom Resource with the parameters in file [jaeger-cr.yaml](cus
 
 After it's created, you can check if Jaeger is functioning by accessing the route created for it.
 
-## Deploy Kafka Cluster and Kafka Exporter
+### Deploy Kafka Cluster and Kafka Exporter
 
 Now that we have a functional Jaeger, we will deploy our Kafka Cluster with the Kafka Exporter. Change target project to "kafka" project created previously.
 In Openshift Operator hub, install AMQ Streams Operator with default configuration like image below:
@@ -66,11 +83,11 @@ Now that we have a functional Kafka cluster, let's create the topic for use in o
 
 ![](docs/images/KafkaTopic.png)
 
-## Deploy Prometheus and Grafana Dashboards
+### Deploy Prometheus and Grafana Dashboards
 
 Now we need to install Prometheus to gather metrics from Kafka, and we will create a dashboard in Grafana to help us monitor the resource consumption of the Kafka cluster during load testing.
 
-### Install Prometheus
+#### Install Prometheus
 
 To install Prometheus, let's go back to the Openshift console and in the Operator Hub section, we will install the Prometheus operator below:
 
@@ -101,7 +118,7 @@ oc apply -f prometheus.yaml
 
 Wait for the Prometheus pods to be up and running, and we will proceed to the next section.
 
-### Install Grafana and Setup Dashboards
+#### Install Grafana and Setup Dashboards
 
 To install Grafana, it's quite simple. We just need to apply the grafana.yaml file located in the custom-resources/grafana directory using the following commands:
 
@@ -127,7 +144,7 @@ We should copy the content of the file [strimzi-kafka-exporter.json](custom-reso
 
 There you have it, the first dashboard is created. If you wish, you can repeat the process for the files [strimzi-kafka.json](custom-resources/grafana/strimzi-kafka.json) and [strimzi-zookeeper.json](custom-resources/grafana/strimzi-zookeeper.json).
 
-## Deploy Camel-Quarkus Apps
+## Deploy Applications
 
 Now we will deploy the applications that will consume and produce messages for our load tests. In these applications, I used Camel Quarkus to simplify the implementation. I also used the Quarkus OpenTelemetry exporter OTLP and Quarkus OpenTelemetry components to send metrics to the Jaeger collector. You can check the versions of these components in the pom.xml file of each project. If you need to modify any configuration, you can do so in the application.properties files of the projects or in the environment variables of the deployment that will be created in Openshift in the following steps.
 Deploy the producer:
@@ -145,25 +162,6 @@ cd camel-quarkus-kafka-consumer
 ```
 
 After deploy applications, note the route to your camel-quarkus kafka producer to pass to Jmeter or K6 in next steps.
-
-## Jmeter tests
-
-JMeter is an open-source performance testing tool developed by Apache. It is widely used for load testing, stress testing, and performance measurement of web applications, APIs, and various server types. JMeter allows users to simulate realistic user scenarios by sending HTTP requests, measuring response times, and analyzing server performance under different loads. It provides a user-friendly interface for creating test plans, configuring test scenarios, and generating detailed reports and graphs for performance analysis. JMeter supports various protocols such as HTTP, HTTPS, FTP, JDBC, SOAP, and many more, making it a versatile tool for performance testing in different domains.You can install jmeter with default config and run it with jmeter.sh file in bin folder.
-After open jmeter gui, click on "Open" button and select [Jmeter Test Plan.jmx](jmeter/Jmeter%20Test%20Plan.jmx) file like bellow:
-
-![](docs/images/JmeterOpenFile.png)
-
-Ajust the user count in User Group session of Test Plan and set the your producer url in API request session in the same Test Plan.
-
-Now click on run button, and check the metrics on grafana and jaeger to make a performance baseline and ajust your environment.
-
-In Grafana metrics, you can view the kafka cluster metrics like messages per second and monitoring consumer lag like bellow:
-
-![](docs/images/GrafanaTest.png)
-
-On Jaeger, you can view the tracing and spans of each request and you check the time for produce and consuming messages:
-
-![](docs/images/JaegerTest.png)
 
 ## K6 tests
 
@@ -210,14 +208,3 @@ Ajusts the test case for what your need and enjoy!
 
 Despite using simpler approaches and spending a lot of time deploying metrics tools for load testing, this approach allows us to tune our environment as we execute the tests. We can adjust the number of users to a scenario that truly makes sense for the application, thus obtaining more accuracy in tuning the environment.
 
-## References
-
-[Open Telemetry Deployment Documentation](https://docs.openshift.com/container-platform/4.12/distr_tracing/distr_tracing_install/distr-tracing-deploying-otel.html)
-
-[Red Hat AMQ Streams Deployment Documentation](https://access.redhat.com/documentation/pt-br/red_hat_amq/7.7/html-single/deploying_and_upgrading_amq_streams_on_openshift/index#deploy-tasks_str)
-
-[Red Hat AMQ Streams Assembly Metrics](https://access.redhat.com/documentation/pt-br/red_hat_amq/7.7/html-single/deploying_and_upgrading_amq_streams_on_openshift/index#assembly-metrics-str)
-
-[JMeter Get Started Guide](https://jmeter.apache.org/usermanual/get-started.html)
-
-[Running Distributed Tests on Kubernetes with K6](https://k6.io/blog/running-distributed-tests-on-k8s/)

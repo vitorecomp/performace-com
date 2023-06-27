@@ -20,6 +20,7 @@ run_openshift(){
         application=$(gum choose "kafka-http-burst" "slow-dependecy")
     fi
 
+    oc project k6-load
 
     mkdir -p $base_dir/tmp
 

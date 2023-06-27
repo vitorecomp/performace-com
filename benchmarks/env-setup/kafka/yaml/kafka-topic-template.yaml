@@ -3,12 +3,12 @@ kind: KafkaTopic
 metadata:
   name: performance-topic-test
   labels:
-    strimzi.io/cluster: my-cluster
+    strimzi.io/cluster: kafka-cluster
   namespace: kafka
 spec:
   config:
     retention.ms: 3600000
-    segment.bytes: 8589934592
-  partitions: 3
+    segment.bytes: 1000000000
+  partitions: 240
   replicas: 3
   topicName: performanceTopicTest

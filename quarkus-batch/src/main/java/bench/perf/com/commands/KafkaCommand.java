@@ -15,7 +15,7 @@ public class KafkaCommand implements Runnable {
     private Integer messageSize;
     @Parameters(paramLabel = "<timesToExecute>", defaultValue = "50", description = "The number of executions.")
     private Integer timesToExecute;
-    @Parameters(paramLabel = "<interval>", defaultValue = "10000", description = "The interval between the executions.")
+    @Parameters(paramLabel = "<interval>", defaultValue = "1000", description = "The interval between the executions.")
     private Integer interval;
 
     KafkaService kafkaService;
@@ -28,7 +28,7 @@ public class KafkaCommand implements Runnable {
     @Override
     public void run() {
         try {
-            KafkaRequest request = new KafkaRequest("kakfa-prog-send", null, numMessages, messageSize, timesToExecute, interval);
+            KafkaRequest request = new KafkaRequest("kafka-prog-send", null, numMessages, messageSize, timesToExecute, interval);
             kafkaService.run(request);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block

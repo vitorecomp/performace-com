@@ -10,7 +10,7 @@ const fromEnv = (name, defaultValue) => {
 export const getConfig = () => {
   const config = {
     messageSize: 2000,
-    numMessages: 20,
+    numMessages: 100,
     numberOfRequests: 10,
 
     appUrl: fromEnv('APP_URL', 'http://localhost:8080'),

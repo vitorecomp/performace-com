@@ -62,7 +62,7 @@ deploy_operator() {
     apply_operator $output_dir
 
     #wait the operator to be ready
-    gum spin --title "wait kafka subscription" -- oc wait --for=condition=AtLatestKnown --timeout=600s subscription/amq-streams -n monitoring
+    gum spin --title "wait kafka subscription" -- oc wait --for=condition=AtLatestKnown --timeout=600s subscription/amq-streams -n kafka
     gum spin --title "wait kafka operator" -- oc wait --for=condition=available --timeout=600s  --selector=name=amq-streams-cluster-operator
 }
 
