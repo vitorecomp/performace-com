@@ -2,7 +2,9 @@
 
 In this repository, you will find the essential resources to test multiple languages on some of the most common tasks in modern development processes. These tasks include responding to HTTP servers, making HTTP requests, communicating over REST APIs or gRPC calls, producing and consuming Kafka messages, and saving and retrieving data from PostgreSQL, among other common tasks.
 
-![Repo main icon](docs/images/repo-image.png){ width="800" height="600" style="display: block; margin: 0 auto" }
+<p align="center">
+  <img width="460" height="400" src="docs/images/repo-image.png">
+</p>
 
 ## Load Tests
 
