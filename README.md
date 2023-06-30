@@ -41,56 +41,61 @@ Bellow, you will find a comprehensive list of the capabilities provided by this 
 
 ## Make the environment setup
 
-```bash
-oc apply -f strimzi-pod-monitor.yaml
-```
+All the environment to test can be setup with a block of commands:
 
-### Deploy Kafka Cluster and Kafka Exporter
+PS. Make sure that you are logged on your cluster before any of the following commands
 
 ```bash
-cd custom-resources/kafka
-oc apply -f kafka-metrics-cm.yaml
+cd benchmarks/env-setup
+sh deploy.sh
 ```
 
-### Deploy Prometheus and Grafana Dashboards
+to a clean install on openshift use:
 
 ```bash
-cd custom-resources/kafka
-oc apply -f kafka-metrics-cm.yaml
+cd benchmarks/env-setup
+sh deploy-openshift.sh
 ```
 
-#### Install Prometheus
+to a clean install on kubernetes use:
 
 ```bash
-oc apply -f strimzi-pod-monitor.yaml
+cd benchmarks/env-setup
+sh deploy-kubernetes.sh
 ```
 
-#### Install Grafana and Setup Dashboards
-
-To install Grafana, it's quite simple. We just need to apply the grafana.yaml file located in the custom-resources/grafana directory using the following commands:
+Is also possible to make the installation of each component by itself, this is possible given
+that each one of them has a deploy.sh file inside it, so to make a installation of a specific component
+go to its folder an run the follow command:
 
 ```bash
-cd custom-resources/grafana
-oc apply grafana.yaml 
+sh deploy.sh
 ```
 
-After grafana pods are running you need a create route for grafana service. And log on grafana with user 'admin' and 'admin' password. To setup a datasource, create in config and datasources like bellow:
+### Grafana Dashboards
 
-![](docs/images/GrafanaDatasource.png)
+The installation will make available some grafana dashboard, they will allow for a better understand of the results,
+and also for insights about possible optimizations.
 
-Fill in the fields as shown in the image below and then click on the "Save and Test" button.
+The follow dashboards will be available on the default installation:
 
-![](docs/images/GrafanaDatasource2.png)
+#### K6 Dashboard
 
-With the datasource configured, we will proceed with the deployment of the dashboard. To do this, click on the plus symbol on the sidebar of Grafana and then click on "Import" as shown below:
+![K6 main dashboard](docs/images/GrafanaK6Datasource.png)
 
-![](docs/images/GrafanaDashboard.png)
+#### Kafka dashboards
 
-We should copy the content of the file [strimzi-kafka-exporter.json](custom-resources/grafana/strimzi-kafka-exporter.json) into the text area and click on "Import" as shown in the image above. Then, select the previously created datasource and click on "Import" as shown below.
+![Kafka topic dashboard](docs/images/GrafanaKafkaTopicDatasource.png)
+![Kafka cluster monitoring dashboard](docs/images/GrafanaKafkaClusterDatasource.png)
 
-![](docs/images/GrafanaDashboardImport.png)
+#### Grafana credentials
 
-There you have it, the first dashboard is created. If you wish, you can repeat the process for the files [strimzi-kafka.json](custom-resources/grafana/strimzi-kafka.json) and [strimzi-zookeeper.json](custom-resources/grafana/strimzi-zookeeper.json).
+To get the credential of your grafana, just run the follow command:
+
+```bash
+oc project monitoring
+oc get secret grafa
+```
 
 ## Deploy Applications
 
