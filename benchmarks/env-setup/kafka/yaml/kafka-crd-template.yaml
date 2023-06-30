@@ -70,7 +70,7 @@ spec:
         port: 9093
         tls: true
         type: internal
-    replicas: 7
+    replicas: 3
     storage:
       class: gp3-csi
       deleteClaim: true
@@ -140,7 +140,7 @@ spec:
               key: app
               operator: Equal
               value: kafka
-    replicas: 7
+    replicas: 3
     storage:
       type: ephemeral
     metricsConfig:

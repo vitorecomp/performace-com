@@ -94,7 +94,8 @@ To get the credential of your grafana, just run the follow command:
 
 ```bash
 oc project monitoring
-oc get secret grafa
+echo $(oc get secret grafana-admin-credentials -o jsonpath='{.data.GF_SECURITY_ADMIN_USER}' |  base64 -w 0 -i --decode)
+echo $(oc get secret grafana-admin-credentials -o jsonpath='{.data.GF_SECURITY_ADMIN_PASSWORD}' |  base64 -w 0 -i --decode)
 ```
 
 ## Deploy Applications
