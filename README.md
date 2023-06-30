@@ -12,15 +12,11 @@ Load tests are an essential practice in software development as they allow evalu
 
 The goal of load testing is to identify potential bottlenecks and limitations of the system, ensuring that it can handle the expected load and maintain acceptable performance. During the test, important metrics are collected and analyzed, including response time, throughput, resource utilization, and scalability.
 
-There are various approaches to conducting load tests. One of them is to use specialized tools that allow simulating a large number of concurrent users, generating realistic workloads, and monitoring the system's performance. These tools provide detailed metrics and reports that help identify potential issues.
-
-Furthermore, load tests can be complemented by techniques such as horizontal scaling, where the system is distributed across multiple servers to increase its processing capacity. This allows evaluating how the system behaves when horizontally scaled, handling higher loads and distributing the processing among different nodes.
-
 The purpose of this repository is to provide developers with a practical and hands-on approach to testing various programming languages in different scenarios. By exploring the code and examples provided, you can gain a better understanding of how different languages handle these tasks and make informed decisions when selecting the most suitable language for your specific project requirements.
 
 Feel free to explore the repository and leverage the resources available to enhance your knowledge and skills in multi-language development. The goal is to empower developers to choose the right language for the job and build robust and efficient applications in diverse environments.
 
-## Complete List of Respo capabilities
+## Complete List of Repo capabilities
 
 Bellow, you will find a comprehensive list of the capabilities provided by this repository:
 
@@ -45,68 +41,29 @@ Bellow, you will find a comprehensive list of the capabilities provided by this 
 
 ## Make the environment setup
 
-
+```bash
+oc apply -f strimzi-pod-monitor.yaml
+```
 
 ### Deploy Kafka Cluster and Kafka Exporter
-
-Now that we have a functional Jaeger, we will deploy our Kafka Cluster with the Kafka Exporter. Change target project to "kafka" project created previously.
-In Openshift Operator hub, install AMQ Streams Operator with default configuration like image below:
-
-![](docs/images/AMQStreamsOperator.png)
-
-After, we need create a Kafka Cluster with Kafka Exporter Custom Resource, click on Installed Operators, click on AMQ Streams and in Kafka section, click on "Create Instance" 
-
-![](docs/images/KafkaInstance.png)
-
-Change to Yaml view and apply a yaml file like this [kafka-cr.yaml](custom-resources/kafka/kafka-cr.yaml) in folder custom-resources/kafka: 
-
-![](docs/images/KafkaYaml.png)
-
-Next, create the Kafka metrics ConfigMap based on the [kafka-metrics-cm.yaml](custom-resources/kafka/kafka-metrics-cm.yaml) file using the following commands:
 
 ```bash
 cd custom-resources/kafka
 oc apply -f kafka-metrics-cm.yaml
 ```
 
-Now that we have a functional Kafka cluster, let's create the topic for use in our tests. To do this, go back to the 'Installed Operators' section of Openshift and click on the AMQ Streams Operator, then click on the 'Kafka Topic' section and click 'Create Instance'. Apply the YAML as shown below:
-
-![](docs/images/KafkaTopic.png)
-
 ### Deploy Prometheus and Grafana Dashboards
 
-Now we need to install Prometheus to gather metrics from Kafka, and we will create a dashboard in Grafana to help us monitor the resource consumption of the Kafka cluster during load testing.
+```bash
+cd custom-resources/kafka
+oc apply -f kafka-metrics-cm.yaml
+```
 
 #### Install Prometheus
-
-To install Prometheus, let's go back to the Openshift console and in the Operator Hub section, we will install the Prometheus operator below:
-
-![](docs/images/PrometheusOperator.png)
-
-After the operator is installed, we will open a terminal window and navigate to the folder where we mapped this repository, then to the custom resources folder, and finally to the kafka-exporter folder. Log on openshift via command line and we will apply the following commands:
-
-Create a strimzi pod monitor
 
 ```bash
 oc apply -f strimzi-pod-monitor.yaml
 ```
-Create a rules for prometheus
-
-```bash
-oc apply prometheus-rules.yaml 
-```
-Create additional rules for prometheus
-
-```bash
-oc apply - f prometheus-additional.yaml
-```
-Finally create a prometheus instance
-
-```bash
-oc apply -f prometheus.yaml 
-```
-
-Wait for the Prometheus pods to be up and running, and we will proceed to the next section.
 
 #### Install Grafana and Setup Dashboards
 
@@ -116,6 +73,7 @@ To install Grafana, it's quite simple. We just need to apply the grafana.yaml fi
 cd custom-resources/grafana
 oc apply grafana.yaml 
 ```
+
 After grafana pods are running you need a create route for grafana service. And log on grafana with user 'admin' and 'admin' password. To setup a datasource, create in config and datasources like bellow:
 
 ![](docs/images/GrafanaDatasource.png)
@@ -136,22 +94,11 @@ There you have it, the first dashboard is created. If you wish, you can repeat t
 
 ## Deploy Applications
 
-Now we will deploy the applications that will consume and produce messages for our load tests. In these applications, I used Camel Quarkus to simplify the implementation. I also used the Quarkus OpenTelemetry exporter OTLP and Quarkus OpenTelemetry components to send metrics to the Jaeger collector. You can check the versions of these components in the pom.xml file of each project. If you need to modify any configuration, you can do so in the application.properties files of the projects or in the environment variables of the deployment that will be created in Openshift in the following steps.
+Now we will deploy the applications that will run the load. Each of this applications can be deployed in its own way, the detailed explanation of each one could be found on the its respective READ-ME file. 
 Deploy the producer:
 
-```bash
-cd camel-quarkus-kafka-api-producer
-./mvnw clean package -Dquarkus.kubernetes.deploy=true
-```
-
-Deploy the consumer:
-
-```bash
-cd camel-quarkus-kafka-consumer
-./mvnw clean package -Dquarkus.kubernetes.deploy=true
-```
-
-After deploy applications, note the route to your camel-quarkus kafka producer to pass to Jmeter or K6 in next steps.
+[Quarkus Application](quarkus/README.md)
+[Quarkus Batch Application](quarkus/README.md)
 
 ## K6 tests
 
@@ -164,11 +111,35 @@ To run tests using K6 in OCP, do you need install the following programs in your
 * Kubectl
 * Make
 
-After you need clone the K6 Operator repository with this commands:
+The installation process could be done in two ways:
+
+### Scripted
+
+The first and easy way is to use the script available in this repo, that will make the complete k6 installation on your cluster. The script on the folder
+[k6 env setup](benchmarks/env-setup/k6/deploy.sh), to run it just use the follow command:
+
+```bash
+cd benchmarks/env-setup/k6/
+sh deploy.sh
+```
+
+is also possible to pass some parameters to the script, to make the process faster.
+
+```bash
+cd benchmarks/env-setup/k6/
+sh deploy.sh openshift clean
+```
+
+### Step by Step
+
+By choosing this option, is possible to customize the installation process, as wee to fine tuning the deploy for your needs.
+
+The first step is to clone the K6 Operator repository with this commands:
 
 ```bash
 git clone https://github.com/grafana/k6-operator && cd k6-operator
 ```
+
 To deploy K6 Operator, you need run the following command:
 
 ```bash
@@ -188,13 +159,13 @@ Finally, we do create a k6 instance with this command:
 ```bash
 oc apply -f k6-sample.yaml
 ```
+
 You can follow the Test run with command "oc get pods" and observe, in this case 4 pods simultaneously running tests like bellow:
 
-![](docs/images/K6Sample.png)
+![K6 running pods example](docs/images/K6Sample.png)
 
-Ajusts the test case for what your need and enjoy!
+Make the adjustments the test case for what your need and enjoy!
 
 ## Conclusions
 
 Despite using simpler approaches and spending a lot of time deploying metrics tools for load testing, this approach allows us to tune our environment as we execute the tests. We can adjust the number of users to a scenario that truly makes sense for the application, thus obtaining more accuracy in tuning the environment.
-
