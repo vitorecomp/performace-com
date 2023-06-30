@@ -97,8 +97,8 @@ There you have it, the first dashboard is created. If you wish, you can repeat t
 Now we will deploy the applications that will run the load. Each of this applications can be deployed in its own way, the detailed explanation of each one could be found on the its respective READ-ME file. 
 Deploy the producer:
 
-[Quarkus Application](quarkus/README.md)
-[Quarkus Batch Application](quarkus/README.md)
+* [Quarkus Application](quarkus/README.md)
+* [Quarkus Batch Application](quarkus/README.md)
 
 ## K6 tests
 
