@@ -1,4 +1,10 @@
-# Load Tests
+# Performance Bencher
+
+In this repository, you will find the essential resources to test multiple languages on some of the most common tasks in modern development processes. These tasks include responding to HTTP servers, making HTTP requests, communicating over REST APIs or gRPC calls, producing and consuming Kafka messages, and saving and retrieving data from PostgreSQL, among other common tasks.
+
+![Repo main icon](docs/images/repo-image.png){ width="800" height="600" style="display: block; margin: 0 auto" }
+
+## Load Tests
 
 Load tests are an essential practice in software development as they allow evaluating the performance and capacity of a system under high-demand conditions. This type of testing simulates situations where many users are interacting simultaneously with the system, performing various operations such as sending requests, processing data, and accessing resources.
 
@@ -7,8 +13,6 @@ The goal of load testing is to identify potential bottlenecks and limitations of
 There are various approaches to conducting load tests. One of them is to use specialized tools that allow simulating a large number of concurrent users, generating realistic workloads, and monitoring the system's performance. These tools provide detailed metrics and reports that help identify potential issues.
 
 Furthermore, load tests can be complemented by techniques such as horizontal scaling, where the system is distributed across multiple servers to increase its processing capacity. This allows evaluating how the system behaves when horizontally scaled, handling higher loads and distributing the processing among different nodes.
-
-In this repository, you will find the essential resources to test multiple languages on some of the most common tasks in modern development processes. These tasks include responding to HTTP servers, making HTTP requests, communicating over REST APIs or gRPC calls, producing and consuming Kafka messages, and saving and retrieving data from PostgreSQL, among other common tasks.
 
 The purpose of this repository is to provide developers with a practical and hands-on approach to testing various programming languages in different scenarios. By exploring the code and examples provided, you can gain a better understanding of how different languages handle these tasks and make informed decisions when selecting the most suitable language for your specific project requirements.
 
@@ -39,23 +43,7 @@ Bellow, you will find a comprehensive list of the capabilities provided by this 
 
 ## Make the environment setup
 
-Log on Openshift, select tracing-plataform project and from Operator Hub, install Elastisearch Operator:
 
-![](docs/images/ElasticSearchOperator.png)
-
-Install it with default parameters, after Elastic Search Operator was successfully installed, from Operator Hub again, install Open Distributed Tracing Operator:
-
-![](docs/images/OpenDistributedTracingOperator.png)
-
-After OpenDistributed Tracing was successfully installed, you can see it on installed operators. Click on it and click in "create instance" like bellow:
-
-![](docs/images/OpendistributedTracingInstance.png)
-
-Create a Jaeger Custom Resource with the parameters in file [jaeger-cr.yaml](custom-resources/jaeger/jaeger-cr.yaml) in folder custom-resources/jaeger like bellow:
-
-![](docs/images/JaegerCR.png)
-
-After it's created, you can check if Jaeger is functioning by accessing the route created for it.
 
 ### Deploy Kafka Cluster and Kafka Exporter
 
