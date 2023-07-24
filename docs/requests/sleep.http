@@ -1,0 +1,7 @@
+#sync sleep request
+GET http://localhost:8080/resource-wait-benchmark/sync-sleep HTTP/1.1
+
+###
+#async sleep request
+GET http://localhost:8080/resource-wait-benchmark/async-sleep?sleepTime=2000 HTTP/1.1
+

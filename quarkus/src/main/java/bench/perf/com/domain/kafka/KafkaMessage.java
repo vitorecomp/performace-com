@@ -1,4 +1,4 @@
-package bench.perf.com.domain;
+package bench.perf.com.domain.kafka;
 
 public class KafkaMessage {
     String message;

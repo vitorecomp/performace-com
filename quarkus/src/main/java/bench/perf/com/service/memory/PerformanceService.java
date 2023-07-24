@@ -1,4 +1,4 @@
-package bench.perf.com.service;
+package bench.perf.com.service.memory;
 
 public class PerformanceService {
     

@@ -1,4 +1,4 @@
-package bench.perf.com.service;
+package bench.perf.com.service.kafka;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -10,9 +10,9 @@ import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.eclipse.microprofile.reactive.messaging.OnOverflow;
 
-import bench.perf.com.domain.KafkaMessage;
-import bench.perf.com.domain.KafkaRequest;
 import bench.perf.com.domain.RequestStatistics;
+import bench.perf.com.domain.kafka.KafkaMessage;
+import bench.perf.com.domain.kafka.KafkaRequest;
 import bench.perf.com.utility.MessageUtils;
 import io.quarkus.logging.Log;
 import io.smallrye.reactive.messaging.kafka.api.IncomingKafkaRecordMetadata;
@@ -32,8 +32,8 @@ public class KafkaService {
         RequestStatistics stats = new RequestStatistics();
         stats.setNumMessages(request.getNumMessages());
         stats.setMessageSize(request.getMessageSize());
-        LocalTime startTime = LocalTime.now();
-        
+        stats.startTimer();
+
         String message = request.getMessage();
         if(message == null){
             message = MessageUtils.generateMessage(request.getMessageSize());
@@ -44,14 +44,11 @@ public class KafkaService {
         KafkaMessage kafkaMessage = new KafkaMessage(message);
         
         for (int i = 0; i < messages; i++) {
-            Log.info("Seding message");  
+            Log.info("Sending message");  
             benchEmitter.send(kafkaMessage);
         }
         
-        LocalTime endTime = LocalTime.now();
-
-        Duration duration = Duration.between(startTime, endTime);
-        stats.setDuration(duration.toMillis());
+        stats.calculateDuration();
         return stats;
     }
 

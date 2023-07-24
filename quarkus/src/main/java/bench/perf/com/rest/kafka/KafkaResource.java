@@ -1,8 +1,8 @@
 package bench.perf.com.rest.kafka;
 
-import bench.perf.com.domain.KafkaRequest;
 import bench.perf.com.domain.RequestStatistics;
-import bench.perf.com.service.KafkaService;
+import bench.perf.com.domain.kafka.KafkaRequest;
+import bench.perf.com.service.kafka.KafkaService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;

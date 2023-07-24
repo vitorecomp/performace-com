@@ -1,4 +1,6 @@
-package bench.perf.com.domain;
+package bench.perf.com.domain.memory;
+
+import bench.perf.com.domain.Path;
 
 public class PerformanceRequest {
 
