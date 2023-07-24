@@ -2,6 +2,7 @@ package bench.perf.com.commands;
 
 import bench.perf.com.domain.KafkaRequest;
 import bench.perf.com.service.KafkaService;
+import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
@@ -31,8 +32,7 @@ public class KafkaCommand implements Runnable {
             KafkaRequest request = new KafkaRequest("kafka-prog-send", null, numMessages, messageSize, timesToExecute, interval);
             kafkaService.run(request);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Log.error("Error on sending message", e, null, e);
         }
     }
 

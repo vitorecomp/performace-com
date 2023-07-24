@@ -1,9 +1,8 @@
-package bench.perf.com.rest;
+package bench.perf.com.rest.kafka;
 
 import bench.perf.com.domain.KafkaRequest;
 import bench.perf.com.domain.RequestStatistics;
 import bench.perf.com.service.KafkaService;
-import io.quarkus.arc.properties.IfBuildProperty;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -25,8 +24,7 @@ public class KafkaResource {
     @Path("/simple-producer")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @IfBuildProperty(name = "kafka-producer-enabled", stringValue = "true")
     public RequestStatistics benchmark(KafkaRequest request) {
-        return kafkaService.run(request);
+        return kafkaService.send(request);
     }
 }

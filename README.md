@@ -2,11 +2,13 @@
 
 In this repository, you will find the essential resources to test multiple languages on some of the most common tasks in modern development processes. These tasks include responding to HTTP servers, making HTTP requests, communicating over REST APIs or gRPC calls, producing and consuming Kafka messages, and saving and retrieving data from PostgreSQL, among other common tasks.
 
+<!-- markdownlint-disable MD033 -->
 <p align="center">
   <img width="460" height="400" src="docs/images/repo-image.png">
 </p>
 
 ## Load Tests
+<!-- markdownlint-disable MD033 -->
 
 Load tests are an essential practice in software development as they allow evaluating the performance and capacity of a system under high-demand conditions. This type of testing simulates situations where many users are interacting simultaneously with the system, performing various operations such as sending requests, processing data, and accessing resources.
 

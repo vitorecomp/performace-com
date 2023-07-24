@@ -1,4 +1,4 @@
-package bench.perf.com.rest;
+package bench.perf.com.rest.memory;
 
 import bench.perf.com.domain.Sleep;
 
