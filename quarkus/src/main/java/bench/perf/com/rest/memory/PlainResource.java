@@ -25,7 +25,7 @@ public class PlainResource {
     @GET
     @Path("/plain-texts")
     public List<String> getPlainList(@QueryParam("messageSize") @DefaultValue("1000") Integer messageSize,
-            @QueryParam("numberOfMessages") @DefaultValue("1000") Integer numberOfMessages) {
+            @QueryParam("numberOfMessages") @DefaultValue("10") Integer numberOfMessages) {
         return plainService.plainStringList(messageSize, numberOfMessages);
     }
 
@@ -38,49 +38,28 @@ public class PlainResource {
 
     @GET
     @Path("/simple-json")
-    public List<SimpleStructure> getSimpleJsonList() {
-        return plainService.simpleStructureList();
+    public List<SimpleStructure> getSimpleJsonList(
+            @QueryParam("numberOfMessages") @DefaultValue("10") Integer numberOfMessages) {
+        return plainService.simpleStructureList(numberOfMessages);
     }
 
     @GET
-    @Path("/simple-json/{id}")
-    public SimpleStructure getSimpleJson() {
-        return plainService.simpleStructure();
+    @Path("/simple-json/{uuid}")
+    public SimpleStructure getSimpleJson(@PathParam("uuid") String uuid) {
+        return plainService.simpleStructure(uuid);
     }
 
     @GET
     @Path("/complex-json")
-    public List<ComplexStructure> getComplexJsonList() {
-        return plainService.complexStructureList();
+    public List<ComplexStructure> getComplexJsonList(
+            @QueryParam("numberOfMessages") @DefaultValue("10") Integer numberOfMessages) {
+        return plainService.complexStructureList(numberOfMessages);
     }
 
     @GET
-    @Path("/complex-json/{id}")
-    public ComplexStructure getComplexJson() {
-        return plainService.complexStructure();
+    @Path("/complex-json/{uuid}")
+    public ComplexStructure getComplexJson(@PathParam("uuid") String uuid) {
+        return plainService.complexStructure(uuid);
     }
 
-    @GET
-    @Path("/small-files")
-    public List<String> getSmallFiles() {
-        return plainService.smallFilesRead();
-    }
-
-    @GET
-    @Path("/small-files/{id}")
-    public String getSmallFile() {
-        return plainService.smallFileRead();
-    }
-
-    @GET
-    @Path("/large-files")
-    public List<String> getLargeFiles() {
-        return plainService.largeFilesRead();
-    }
-
-    @GET
-    @Path("/large-files/{id}")
-    public String getLargeFile() {
-        return plainService.largeFileRead();
-    }
 }

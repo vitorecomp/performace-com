@@ -25,39 +25,29 @@ public class PlainService {
     }
 
     // plain text json services
-    public SimpleStructure simpleStructure() {
-        return null;
+    public SimpleStructure simpleStructure(String uuid) {
+        return new SimpleStructure(uuid);
     }
 
-    public List<SimpleStructure> simpleStructureList() {
-        return null;
+    public List<SimpleStructure> simpleStructureList(Integer numberOfStructs) {
+        List<SimpleStructure> simpleStructures = new ArrayList<>(numberOfStructs);
+        for (Integer i = 0; i < numberOfStructs; i++) {
+            simpleStructures.set(i, new SimpleStructure());
+        }
+        return simpleStructures;
     }
 
     // complex json services
-    public ComplexStructure complexStructure() {
-        return null;
+    public ComplexStructure complexStructure(String uuid) {
+        return new ComplexStructure(uuid);
+
     }
 
-    public List<ComplexStructure> complexStructureList() {
-        return null;
+    public List<ComplexStructure> complexStructureList(Integer numberOfStructs) {
+        List<ComplexStructure> complexStructures = new ArrayList<>(numberOfStructs);
+        for (Integer i = 0; i < numberOfStructs; i++) {
+            complexStructures.set(i, new ComplexStructure());
+        }
+        return complexStructures;
     }
-
-    // small file services
-    public List<String> smallFilesRead() {
-        return null;
-    }
-
-    public String smallFileRead() {
-        return null;
-    }
-
-    // large file services
-    public List<String> largeFilesRead() {
-        return null;
-    }
-
-    public String largeFileRead() {
-        return null;
-    }
-
 }
