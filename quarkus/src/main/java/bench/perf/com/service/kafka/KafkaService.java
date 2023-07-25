@@ -1,7 +1,5 @@
 package bench.perf.com.service.kafka;
 
-import java.time.Duration;
-import java.time.LocalTime;
 import java.util.concurrent.CompletionStage;
 
 import org.eclipse.microprofile.reactive.messaging.Channel;
