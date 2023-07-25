@@ -29,7 +29,7 @@ public class PlainService {
         return null;
     }
 
-    public SimpleStructure simpleStructureList() {
+    public List<SimpleStructure> simpleStructureList() {
         return null;
     }
 

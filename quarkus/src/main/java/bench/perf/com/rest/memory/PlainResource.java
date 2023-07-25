@@ -1,6 +1,5 @@
 package bench.perf.com.rest.memory;
 
-import java.util.Collections;
 import java.util.List;
 
 import bench.perf.com.domain.memory.ComplexStructure;
@@ -23,24 +22,24 @@ public class PlainResource {
         this.plainService = plainService;
     }
 
-
     @GET
     @Path("/plain-texts")
-    public List<String> getPlain(@QueryParam("messageSize") @DefaultValue("1000") Integer messageSize, @QueryParam("numberOfMessages") @DefaultValue("1000") Integer numberOfMessages) {
+    public List<String> getPlainList(@QueryParam("messageSize") @DefaultValue("1000") Integer messageSize,
+            @QueryParam("numberOfMessages") @DefaultValue("1000") Integer numberOfMessages) {
         return plainService.plainStringList(messageSize, numberOfMessages);
     }
 
-
     @GET
     @Path("/plain-texts/{id}")
-    public String getPlain(@QueryParam("messageSize") @DefaultValue("1000") Integer messageSize, @PathParam Integer id) {
+    public String getPlain(@QueryParam("messageSize") @DefaultValue("1000") Integer messageSize,
+            @PathParam("id") Integer id) {
         return plainService.plainString(id, messageSize);
     }
 
     @GET
     @Path("/simple-json")
     public List<SimpleStructure> getSimpleJsonList() {
-        
+        return plainService.simpleStructureList();
     }
 
     @GET
