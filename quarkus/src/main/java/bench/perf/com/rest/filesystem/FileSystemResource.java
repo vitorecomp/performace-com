@@ -2,9 +2,11 @@ package bench.perf.com.rest.filesystem;
 
 import java.util.List;
 
+import bench.perf.com.domain.filesystem.FileProprieties;
 import bench.perf.com.service.filesystem.FileSystemService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
@@ -35,8 +37,12 @@ public class FileSystemResource {
 
     @POST
     @Path("/small-files")
-    public String postSmallFiles(String fileContent) {
-        return fileSystemService.saveSmallFile(fileContent);
+    public String postSmallFiles(FileProprieties fileProprieties) {
+        String responseFile = fileSystemService.saveSmallFile(fileProprieties);
+        if (responseFile == null) {
+            throw new BadRequestException();
+        }
+        return responseFile;
     }
 
     @PUT
@@ -74,8 +80,12 @@ public class FileSystemResource {
 
     @POST
     @Path("/large-files")
-    public String postLargeFiles(String fileContent) {
-        return fileSystemService.saveLargeFile(fileContent);
+    public String postLargeFiles(FileProprieties fileProprieties) {
+        String responseFile = fileSystemService.saveLargeFile(fileProprieties);
+        if (responseFile == null) {
+            throw new BadRequestException();
+        }
+        return responseFile;
     }
 
     @PUT

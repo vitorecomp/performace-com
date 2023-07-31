@@ -2,11 +2,12 @@ package bench.perf.com.service.filesystem;
 
 import java.util.List;
 
+import bench.perf.com.domain.filesystem.FileProprieties;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class FileSystemService {
-    public String saveSmallFile(String fileContent) {
+    public String saveSmallFile(FileProprieties fileProprieties) {
         return null;
     }
 
@@ -36,7 +37,7 @@ public class FileSystemService {
         return null;
     }
 
-    public String saveLargeFile(String fileContent) {
+    public String saveLargeFile(FileProprieties fileProperties) {
         return null;
     }
 
