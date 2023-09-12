@@ -38,4 +38,8 @@ public class FileProprieties {
     public void setSize(Integer size) {
         this.size = size;
     }
+
+    public boolean validateName() {
+        return false;
+    }
 }
